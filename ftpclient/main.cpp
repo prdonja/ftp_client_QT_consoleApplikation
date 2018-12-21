@@ -18,7 +18,6 @@ char cmdc[100] = "";
 FtpDataChannel dataChannel;
 FtpControlChannel controlChannel;
 int state;
-char msg[100] = "pera";
 
 int main(int argc, char *argv[])
 {
@@ -26,9 +25,7 @@ int main(int argc, char *argv[])
 
     QCoreApplication app(argc, argv);
 
-    QString server = "192.168.0.11";
-    QString file = "ftp://stevinserver/ftpserver.txt";
-
+    QString server = "192.168.56.1";
 
     // Print all data retrieved from the server on the console.
     QObject::connect(&dataChannel, &FtpDataChannel::dataReceived, [](const QByteArray &data) {
@@ -46,14 +43,14 @@ int main(int argc, char *argv[])
             QString filename="d:\\";
             filename.append(cmdc);
             QFile file1( filename );
-            if ( file1.open(QIODevice::WriteOnly | QIODevice::Append) )
+            if ( file1.open(QIODevice::Append) )
             {
                 QTextStream out( &file1 );
                 out << data.constData();
                 file1.close();
             }
 
-            if(data.length() < 65536 && state != 1)
+            if(data.length() < 8192 && state != 1)
             {
                 state = -1;
             }
@@ -64,7 +61,7 @@ int main(int argc, char *argv[])
         {
             state = 1;
             //Send information to server on what port to connect data channel
-            controlChannel.command("PORT", "192,168,0,11,4,1"); //4*256 + 1 = 1025
+            controlChannel.command("PORT", "192,168,56,1,40,1"); //4*256 + 1 = 1025
 
             cout << endl << "Type in name of file you want to download or if you want to disconnect type 'END':" << endl;
             cin >> cmdc;
@@ -100,11 +97,12 @@ int main(int argc, char *argv[])
     controlChannel.command("PASS", cmdQBA);
 
     //Send information to server on what port to connect data channel
-    controlChannel.command("PORT", "192,168,0,11,4,1"); //4*256 + 1 = 1025
+    controlChannel.command("PORT", "192,168,56,1,40,1"); //4*256 + 1 = 1025
 
     QObject::connect(&controlChannel, &FtpControlChannel::opened,[&](const QHostAddress &address, int)
     {
          dataChannel.listen(address);
+         cout << "listening.." << endl;
     });
 
     controlChannel.command("LIST", "");
