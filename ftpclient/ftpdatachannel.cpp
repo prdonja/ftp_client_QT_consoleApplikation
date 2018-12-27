@@ -13,7 +13,6 @@ FtpDataChannel::FtpDataChannel(QObject *parent) : QObject(parent)
 void FtpDataChannel::listen(const QHostAddress &address)
 {
     m_server.listen(address, 10241);
-    qDebug() << address << "<-address";
 }
 
 void FtpDataChannel::sendData(const QByteArray &data)

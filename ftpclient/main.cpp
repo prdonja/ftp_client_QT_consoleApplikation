@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
         {
             state = 1;
             //Send information to server on what port to connect data channel
-            controlChannel.command("PORT", "192,168,56,1,40,1"); //4*256 + 1 = 1025
+            controlChannel.command("PORT", "192,168,56,1,40,1"); //40*256 + 1
 
             cout << endl << "Type in name of file you want to download or if you want to disconnect type 'END':" << endl;
             cin >> cmdc;
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     controlChannel.command("PASS", cmdQBA);
 
     //Send information to server on what port to connect data channel
-    controlChannel.command("PORT", "192,168,56,1,40,1"); //4*256 + 1 = 1025
+    controlChannel.command("PORT", "192,168,56,1,40,1"); //40*256 + 1
 
     QObject::connect(&controlChannel, &FtpControlChannel::opened,[&](const QHostAddress &address, int)
     {
